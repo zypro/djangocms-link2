@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import string
-from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.urlresolvers import NoReverseMatch
 from django.db import models
 from django.utils.html import escape
