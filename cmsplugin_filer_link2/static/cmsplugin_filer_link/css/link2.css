@@ -1,0 +1,14 @@
+.link2-destination {
+    margin-top: -25px;
+}
+.link2-destination .nav.nav-tabs {
+    padding: 0;
+    border: 0;
+    margin-bottom: 5px;
+}
+.link2-destination .nav.nav-tabs li {
+    border-top: 0;
+}
+.link2-destination .tab-pane label {
+    display: none;
+}
