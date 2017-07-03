@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.urlresolvers import NoReverseMatch
 from django.db import models
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
@@ -14,7 +16,6 @@ from filer.fields.file import FilerFileField
 from filer.utils.compatibility import python_2_unicode_compatible
 
 from djangocms_attributes_field.fields import AttributesField
-
 
 DEFULT_LINK_STYLES = (
     (" ", "Default"),
@@ -45,6 +46,11 @@ class FilerLink2Plugin(CMSPlugin):
     file = FilerFileField(blank=True, null=True, on_delete=models.SET_NULL)
     link_attributes = AttributesField(excluded_keys=EXCLUDED_KEYS, blank=True,
                                       help_text=_('Optional. Adds HTML attributes to the rendered link.'))
+
+    encrypt_mailto = models.BooleanField(_('Encryption of Mailto'), default=False,
+                                         help_text=_('Encrypt the mailto, as protection against bots collecting mails '
+                                                     'addresses.'))
+
     cmsplugin_ptr = models.OneToOneField(
         to=CMSPlugin,
         related_name='%(app_label)s_%(class)s',
@@ -70,11 +76,27 @@ class FilerLink2Plugin(CMSPlugin):
         # delete link health state
         LinkHealthState.objects.filter(link=self).delete()
 
+    def get_encrypted_mailto(self):
+        name, domain = self.mailto.split('@')
+        return 'javascript:window.location.href = \'mailto:\' + [\'{}\', \'{}\'].join(\'@\')'.format(name, domain)
+
+    def get_name(self):
+        if self.encrypt_mailto and self.mailto:
+            if self.name == self.mailto:
+                name, domain = self.name.split('@')
+                # escape name and domain for security reasons
+                return mark_safe('{}<!---->@<!---->{}'.format(escape(name), escape(domain)))
+        else:
+            return self.name
+
     def get_link(self):
         if self.file:
             link = self.file.url
         elif self.mailto:
-            link = 'mailto:{}'.format(_(self.mailto))
+            if self.encrypt_mailto:
+                link = _(self.get_encrypted_mailto())
+            else:
+                link = 'mailto:{}'.format(_(self.mailto))
         elif self.url:
             link = _(self.url)
         elif self.page_link:
@@ -126,7 +148,6 @@ class FilerLink2Plugin(CMSPlugin):
 
 @python_2_unicode_compatible
 class LinkHealthState(models.Model):
-
     NOT_REACHABLE = '4xx'
     REDIRECT = '3xx'
     SERVER_ERROR = '5xx'
