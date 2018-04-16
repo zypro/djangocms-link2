@@ -13,7 +13,7 @@ class Command(BaseCommand):
     help = 'Check all links for the availability of their destination'
 
     def check_with_request(self, url):
-        if url.startswith('#'):
+        if url and url.startswith('#'):
             return
         try:
             r = requests.get(url)
