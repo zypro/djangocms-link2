@@ -17,6 +17,8 @@ from filer.utils.compatibility import python_2_unicode_compatible
 
 from djangocms_attributes_field.fields import AttributesField
 
+from cmsplugin_filer_link2.validators import validate_anchor_id
+
 DEFULT_LINK_STYLES = (
     (" ", "Default"),
 )
@@ -50,6 +52,13 @@ class FilerLink2Plugin(CMSPlugin):
     encrypt_mailto = models.BooleanField(_('Encryption of Mailto'), default=False,
                                          help_text=_('Encrypt the mailto, as protection against bots collecting mails '
                                                      'addresses.'))
+
+    anchor_id = models.CharField(
+        _('Anchor ID'),
+        blank=True,
+        max_length=100,
+        validators=[validate_anchor_id]
+    )
 
     cmsplugin_ptr = models.OneToOneField(
         to=CMSPlugin,
@@ -118,6 +127,9 @@ class FilerLink2Plugin(CMSPlugin):
             link = self.persistent_page_link
         else:
             link = ''
+        # Append anchor ID to url
+        if self.anchor_id:
+            link += '#{}'.format(self.anchor_id)
         return link or ''
 
     def set_linkstate(self, state):

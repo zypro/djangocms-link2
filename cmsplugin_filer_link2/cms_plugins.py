@@ -39,6 +39,7 @@ class FilerLink2Plugin(CMSPluginBase):
             'fields': [
                 'new_window',
                 'link_style',
+                'anchor_id',
             ]
         }),
         (_('Advanced'), {
