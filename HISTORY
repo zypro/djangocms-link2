@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.1.2 (2018-12-03)
+------------------
+* add anchor field for internal page links
+* add missing migration
+
+
 1.0 (2017-03-20)
 ----------------
 
