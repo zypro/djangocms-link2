@@ -19,3 +19,6 @@ class FilerLink2Form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FilerLink2Form, self).__init__(*args, **kwargs)
         self.fields['link_attributes'].widget = AttributesWidget()
+
+    def clean_anchor_id(self):
+        return self.cleaned_data['anchor_id'].replace('#', '')
