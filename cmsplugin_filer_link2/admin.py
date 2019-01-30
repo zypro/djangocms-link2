@@ -24,7 +24,11 @@ class LinkStateAdmin(admin.ModelAdmin):
 
     def on_page(self, obj):
         activate(obj.link.language)
-        return mark_safe('<a href="{link}" >{link}</a>'.format(link=obj.link.page.get_absolute_url()))
+        try:
+            return mark_safe('<a href="{link}" >{link}</a>'.format(link=obj.link.page.get_absolute_url()))
+        except AttributeError:
+            # this can happen when a link is not embedded on a page, but e.g. in an app (e.g. AldrynNewsblog)
+            return _('Not embedded on a page, but for example in an app.')
     on_page.allow_tags = True
     on_page.short_description = _('On page')
 
