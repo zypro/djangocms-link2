@@ -55,3 +55,11 @@ To get started using ``djangocms-link2``:
 
 - run ``migrate cmsplugin_filer_link2``.
 - remove the default ``djangocms-link`` or ``cmsplugin_filer_link`` from your ``INSTALLED_APPS``
+- add ``LINK_DOMAIN = 'www.yourdomain.com'`` to your settings to make sure files and relative paths can be checked
+  through the management command.
+
+Management Command
+==================
+
+``./manage.py check_links`` allows you to check all ``Link`` instances.
+``./manage.py check_links --timeout=20`` allows you to set a timeout for quicker checks. Default timeout is 60 seconds.

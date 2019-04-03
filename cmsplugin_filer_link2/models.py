@@ -164,12 +164,14 @@ class LinkHealthState(models.Model):
     REDIRECT = '3xx'
     SERVER_ERROR = '5xx'
     BAD_CONFIGURED = 'bad'
+    TIMEOUT = 'to'
 
     LINK_STATES = (
         (REDIRECT, _('Redirected')),
         (NOT_REACHABLE, _('Not reachable')),
         (SERVER_ERROR, _('Server error')),
         (BAD_CONFIGURED, _('Bad configured')),
+        (TIMEOUT, _('Timeout')),
     )
 
     link = models.OneToOneField(FilerLink2Plugin, unique=True, related_name='linkhealth',
