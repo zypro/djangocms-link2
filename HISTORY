@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.1.5 (2019-04-05)
+-----------------
+* add user agent to request (management command check_links)
+* add flag to disable user agent (management command check_links)
+
+
 1.1.4 (2019-04-03)
 ------------------
 * fixes bug that caused management command to crash with an InvalidSchema exception
