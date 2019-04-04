@@ -16,8 +16,9 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--timeout', default=60, type=int, nargs='?')
+        parser.add_argument('--no-agent', default=False, type=bool, nargs='?')
 
-    def check_with_request(self, url, timeout):
+    def check_with_request(self, url, timeout, use_agent=True):
         LINK_DOMAIN = getattr(settings, 'LINK_DOMAIN', None)
         if url.startswith('/'):
             if not LINK_DOMAIN:
@@ -26,8 +27,14 @@ class Command(BaseCommand):
 
         if url and url.startswith('#'):
             return
+
+        headers = {}
+
+        if use_agent:
+            headers['User-Agent'] = 'Link Checker - Brought to you by Blueshoe'
+
         try:
-            r = requests.get(url, verify=False, timeout=timeout)
+            r = requests.get(url, verify=False, timeout=timeout, headers=headers)
         except ReadTimeout:
             return LinkHealthState.TIMEOUT
         except ConnectionError:
@@ -45,6 +52,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         timeout = options['timeout']
+        no_agent = options['no_agent']
 
         all_links = FilerLink2Plugin.objects.all()
         self.stdout.write('Checking {num} link-instances'.format(num=all_links.count()))
@@ -52,9 +60,9 @@ class Command(BaseCommand):
         for link in all_links:
             status = None
             if link.file:
-                status = self.check_with_request(link.file.url, timeout=timeout)
+                status = self.check_with_request(link.file.url, timeout=timeout, use_agent=not no_agent)
             elif link.url:
-                status = self.check_with_request(link.url, timeout=timeout)
+                status = self.check_with_request(link.url, timeout=timeout, use_agent=not no_agent)
             elif link.page_link:
                 try:
                     # see if we can resolve the page this link points to
