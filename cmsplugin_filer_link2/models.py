@@ -17,6 +17,7 @@ from filer.utils.compatibility import python_2_unicode_compatible
 
 from djangocms_attributes_field.fields import AttributesField
 
+from cmsplugin_filer_link2.fields import Select2PageField
 from cmsplugin_filer_link2.validators import validate_anchor_id
 
 DEFULT_LINK_STYLES = (
@@ -33,7 +34,7 @@ class FilerLink2Plugin(CMSPlugin):
     name = models.CharField(_('name'), max_length=255)
     url = models.CharField(_('url'), blank=True, null=True, max_length=2000,
                            help_text=_('The url must specify the protocol, e.g. https://DOMAIN.tld'))
-    page_link = PageField(
+    page_link = Select2PageField(
         verbose_name=_('page'),
         blank=True,
         null=True,
