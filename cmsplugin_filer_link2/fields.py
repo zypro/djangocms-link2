@@ -31,7 +31,7 @@ class PageSelect2Widget(PageSelectWidget):
         result = super(PageSelect2Widget, self)._build_script(name, value, attrs={})
         result += """
         <script>
-            var select2Instance = $('[name="%(name)s_1"]').select2();
+            var select2Instance = $('[name="%(name)s_1"]').select2({ dropdownAutoWidth : true });
             setTimeout(function () {select2Instance.trigger('change')}, 300);
         </script>
         """ % {
