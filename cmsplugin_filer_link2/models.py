@@ -10,7 +10,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from cms.models import CMSPlugin
-from cms.models.fields import PageField
 
 from filer.fields.file import FilerFileField
 from filer.utils.compatibility import python_2_unicode_compatible

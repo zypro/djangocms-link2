@@ -5,7 +5,6 @@ from cms.forms.utils import get_site_choices, get_page_choices
 from cms.forms.widgets import PageSelectWidget
 from cms.models.fields import PageField
 from django.forms import Select
-from django_select2.forms import Select2Widget
 
 
 class PageSelect2Widget(PageSelectWidget):
