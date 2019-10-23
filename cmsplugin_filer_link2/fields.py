@@ -5,6 +5,10 @@ from cms.forms.utils import get_site_choices, get_page_choices
 from cms.forms.widgets import PageSelectWidget
 from cms.models.fields import PageField
 from django.forms import Select
+# This import is needed to make sure the django-select2 settings are actually loaded. Since django-select2 uses
+# the django-appconf package to load some settings we cannot be certain the these settings are loaded when this
+# module is imported.
+from django_select2.forms import Select2Widget  # noqa
 
 
 class PageSelect2Widget(PageSelectWidget):
