@@ -12,3 +12,8 @@
 .link2-destination .tab-pane label {
     display: none;
 }
+
+/* Fullwidth select2 dropdown */
+.field-page_link .select2-container {
+    width: 100% !important;
+}
